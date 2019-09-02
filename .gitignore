@@ -1,0 +1,5 @@
+.DS_Store
+.node-version
+*.log
+.npmrc
+node_modules
