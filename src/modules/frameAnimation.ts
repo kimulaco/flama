@@ -42,6 +42,7 @@ const frameAnimation = (
     timer.duration = duration
 
     loopFrame(frameFunc, () => {
+      frameFunc(1)
       resolve()
     }, () => {
       reject()

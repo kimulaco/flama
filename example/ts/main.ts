@@ -1,4 +1,8 @@
-import { delay, frameAnimation } from '../../src/flanim'
+import {
+  delay,
+  frameAnimation,
+  animate
+} from '../../src/flanim'
 
 const setDelay = async () => {
   await delay(1000)
@@ -27,5 +31,23 @@ const setFlameAnimation = () => {
   })
 }
 
+const setAnimate = () => {
+  const btn: HTMLElement | null = document.getElementById('F-button')
+  const box: HTMLElement | null = document.getElementById('F-box')
+
+  if (!btn || !box) return
+
+  btn.addEventListener('click', async () => {
+    await animate(box, {
+      width: 200,
+      height: 200,
+    }, {
+      duration: 1000,
+      ext: 'px'
+    })
+  })
+}
+
 setDelay()
 setFlameAnimation()
+setAnimate()

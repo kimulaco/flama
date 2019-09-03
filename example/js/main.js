@@ -96,6 +96,7 @@
             timer.start = Date.now();
             timer.duration = duration;
             loopFrame(frameFunc, function () {
+                frameFunc(1);
                 resolve();
             }, function () {
                 reject();
@@ -103,8 +104,41 @@
         });
     };
 
+    var DEFAULT_DURATION = 500;
+
     var _this = undefined;
-    var setDelay = function () { return __awaiter(_this, void 0, void 0, function () {
+    var getStyle = function (element, property) {
+        if (property === 'width') {
+            return element.clientWidth;
+        }
+        else if (property === 'height') {
+            return element.clientHeight;
+        }
+        return;
+    };
+    var animate = function (element, styles, option) { return __awaiter(_this, void 0, void 0, function () {
+        var diffStyles, currentStyles, property;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    diffStyles = {};
+                    currentStyles = {};
+                    for (property in styles) {
+                        currentStyles[property] = getStyle(element, property);
+                        diffStyles[property] = styles[property] - currentStyles[property];
+                    }
+                    return [4, frameAnimation(option.duration || DEFAULT_DURATION, function (progress) {
+                            for (property in styles) {
+                                element.style[property] = (diffStyles[property] * progress) + currentStyles[property] + option.ext;
+                            }
+                        })];
+                case 1: return [2, _a.sent()];
+            }
+        });
+    }); };
+
+    var _this$1 = undefined;
+    var setDelay = function () { return __awaiter(_this$1, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4, delay(1000)];
@@ -131,7 +165,7 @@
         var startWidth = box.clientWidth;
         var endWidth = 200;
         var diffWidth = endWidth - startWidth;
-        btn.addEventListener('click', function () { return __awaiter(_this, void 0, void 0, function () {
+        btn.addEventListener('click', function () { return __awaiter(_this$1, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4, frameAnimation(1000, function (progress) {
@@ -145,7 +179,30 @@
             });
         }); });
     };
+    var setAnimate = function () {
+        var btn = document.getElementById('F-button');
+        var box = document.getElementById('F-box');
+        if (!btn || !box)
+            return;
+        btn.addEventListener('click', function () { return __awaiter(_this$1, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, animate(box, {
+                            width: 200,
+                            height: 200,
+                        }, {
+                            duration: 1000,
+                            ext: 'px'
+                        })];
+                    case 1:
+                        _a.sent();
+                        return [2];
+                }
+            });
+        }); });
+    };
     setDelay();
     setFlameAnimation();
+    setAnimate();
 
 }));
