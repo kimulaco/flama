@@ -9,7 +9,8 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production rollup -c",
     "dev": "rollup -c -w",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint -c .eslintrc.js src/**/*.ts"
   },
   "lint-staged": {
     "*.{ts,js}": "yarn lint"
