@@ -1,32 +1,13 @@
-import { eslint } from 'rollup-plugin-eslint'
-import typescript from 'rollup-plugin-typescript2'
-import {terser} from 'rollup-plugin-terser'
+import prodConfig from './rollup.config.prod'
+import devConfig from './rollup.config.dev'
 
-const packageName = 'flanim'
 const isProd = process.env.NODE_ENV === 'production'
-const isMinify = process.env.MINIFY === 'true'
-let outputFile = ''
+let config = ''
 
 if (isProd) {
-  if (isMinify) {
-    outputFile = `dist/${packageName}.min.js`
-  } else {
-    outputFile = `dist/${packageName}.js`
-  }
+  config = prodConfig
 } else {
-  outputFile = `docs/js/${packageName}.js`
+  config = devConfig
 }
 
-export default {
-  input: `./src/${packageName}.ts`,
-  output: {
-    name: packageName,
-    file: outputFile,
-    format: 'umd'
-  },
-  plugins: [
-    eslint(),
-    typescript(),
-    isMinify && terser()
-  ]
-}
+export default config
