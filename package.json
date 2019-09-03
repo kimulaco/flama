@@ -8,7 +8,9 @@
   "main": "index.js",
   "scripts": {
     "build": "cross-env NODE_ENV=production rollup -c",
-    "dev": "rollup -c -w",
+    "dev": "npm-run-all -p dev:*",
+    "dev:build": "rollup -c -w",
+    "dev:serve": "serve example -p 5000",
     "test": "jest",
     "lint": "eslint src/**/*.ts example/**/*.ts -c .eslintrc.js"
   },
@@ -34,6 +36,7 @@
     "rollup-plugin-eslint": "^7.0.0",
     "rollup-plugin-terser": "^5.1.1",
     "rollup-plugin-typescript2": "^0.24.0",
+    "serve": "^11.1.0",
     "typescript": "3.5.3"
   }
 }
