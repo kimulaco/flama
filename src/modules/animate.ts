@@ -1,4 +1,5 @@
 import { DEFAULT_DURATION } from '../default'
+import { getStyle } from '../utils/style'
 import frameAnimation from './frameAnimation'
 
 interface AnimateOption {
@@ -11,12 +12,14 @@ const animate = async (
   styles: any,
   option: AnimateOption
 ): Promise<void> => {
-  const computedStyles: any = getComputedStyle(element)
+  const computedStyles: any = getStyle(element, Object.keys(styles))
   const diffStyles: any = {}
   const currentStyles: any = {}
   let property: string
 
-  for (property in styles) {
+  console.log(computedStyles)
+
+  for (property in computedStyles) {
     currentStyles[property] = parseInt(computedStyles[property], 16)
     diffStyles[property] = styles[property] - currentStyles[property]
   }

@@ -106,16 +106,27 @@
 
     var DEFAULT_DURATION = 500;
 
+    var getStyle = function (element, styles) {
+        var conputedStyles = getComputedStyle(element);
+        var resultStyles = {};
+        for (var _i = 0, styles_1 = styles; _i < styles_1.length; _i++) {
+            var prop = styles_1[_i];
+            resultStyles[prop] = conputedStyles[prop];
+        }
+        return resultStyles;
+    };
+
     var _this = undefined;
     var animate = function (element, styles, option) { return __awaiter(_this, void 0, void 0, function () {
         var computedStyles, diffStyles, currentStyles, property;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    computedStyles = getComputedStyle(element);
+                    computedStyles = getStyle(element, Object.keys(styles));
                     diffStyles = {};
                     currentStyles = {};
-                    for (property in styles) {
+                    console.log(computedStyles);
+                    for (property in computedStyles) {
                         currentStyles[property] = parseInt(computedStyles[property], 16);
                         diffStyles[property] = styles[property] - currentStyles[property];
                     }
