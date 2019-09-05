@@ -39,8 +39,10 @@ const setAnimate = () => {
 
   btn.addEventListener('click', async () => {
     await animate(box, {
-      width: 200,
-      height: 200,
+      'width': 200,
+      'height': 200,
+      'margin-top': 100,
+      'margin-left': 100,
     }, {
       duration: 1000,
       ext: 'px'

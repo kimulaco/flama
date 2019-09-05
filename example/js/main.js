@@ -107,24 +107,16 @@
     var DEFAULT_DURATION = 500;
 
     var _this = undefined;
-    var getStyle = function (element, property) {
-        if (property === 'width') {
-            return element.clientWidth;
-        }
-        else if (property === 'height') {
-            return element.clientHeight;
-        }
-        return;
-    };
     var animate = function (element, styles, option) { return __awaiter(_this, void 0, void 0, function () {
-        var diffStyles, currentStyles, property;
+        var computedStyles, diffStyles, currentStyles, property;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
+                    computedStyles = getComputedStyle(element);
                     diffStyles = {};
                     currentStyles = {};
                     for (property in styles) {
-                        currentStyles[property] = getStyle(element, property);
+                        currentStyles[property] = parseInt(computedStyles[property], 16);
                         diffStyles[property] = styles[property] - currentStyles[property];
                     }
                     return [4, frameAnimation(option.duration || DEFAULT_DURATION, function (progress) {
@@ -188,8 +180,10 @@
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4, animate(box, {
-                            width: 200,
-                            height: 200,
+                            'width': 200,
+                            'height': 200,
+                            'margin-top': 100,
+                            'margin-left': 100,
                         }, {
                             duration: 1000,
                             ext: 'px'

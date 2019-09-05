@@ -6,26 +6,18 @@ interface AnimateOption {
   ext: string
 }
 
-const getStyle = (element: any, property: string) => {
-  if (property === 'width') {
-    return element.clientWidth
-  } else if (property === 'height') {
-    return element.clientHeight
-  }
-  return
-}
-
 const animate = async (
   element: any,
   styles: any,
   option: AnimateOption
 ): Promise<void> => {
+  const computedStyles: any = getComputedStyle(element)
   const diffStyles: any = {}
   const currentStyles: any = {}
   let property: string
 
   for (property in styles) {
-    currentStyles[property] = getStyle(element, property)
+    currentStyles[property] = parseInt(computedStyles[property], 16)
     diffStyles[property] = styles[property] - currentStyles[property]
   }
 
