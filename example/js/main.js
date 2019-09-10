@@ -106,6 +106,49 @@
 
     var DEFAULT_DURATION = 500;
     var DEFAULT_DELAY = 0;
+    var DEFAULT_EASING = 'linear';
+
+    var easing = {
+        linear: function (t) {
+            return t;
+        },
+        easeInQuad: function (t) {
+            return t * t;
+        },
+        easeOutQuad: function (t) {
+            return t * (2 - t);
+        },
+        easeInOutQuad: function (t) {
+            return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        },
+        easeInCubic: function (t) {
+            return t * t * t;
+        },
+        easeOutCubic: function (t) {
+            return --t * t * t + 1;
+        },
+        easeInOutCubic: function (t) {
+            return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+        },
+        easeInQuart: function (t) {
+            return t * t * t * t;
+        },
+        easeOutQuart: function (t) {
+            return 1 - --t * t * t * t;
+        },
+        easeInOutQuart: function (t) {
+            return t < 0.5 ? 8 * t * t * t * t : 1 - 8 * --t * t * t * t;
+        },
+        easeInQuint: function (t) {
+            return t * t * t * t * t;
+        },
+        easeOutQuint: function (t) {
+            return 1 + --t * t * t * t * t;
+        },
+        easeInOutQuint: function (t) {
+            return t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * --t * t * t * t * t;
+        }
+    };
 
     var getStyle = function (element, styles) {
         var conputedStyles = getComputedStyle(element);
@@ -121,12 +164,13 @@
     var animate = function (element, styles, option) {
         if (option === void 0) { option = {}; }
         return __awaiter(_this, void 0, void 0, function () {
-            var optDuration, optDelay, computedStyles, diffStyles, property;
+            var optDuration, optDelay, optEasing, computedStyles, diffStyles, property;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         optDuration = option.duration || DEFAULT_DURATION;
                         optDelay = option.delay || DEFAULT_DELAY;
+                        optEasing = option.easing || DEFAULT_EASING;
                         computedStyles = getStyle(element, Object.keys(styles));
                         diffStyles = {};
                         for (property in computedStyles) {
@@ -139,7 +183,9 @@
                         _a.label = 2;
                     case 2: return [4, frameAnimation(optDuration, function (progress) {
                             for (property in styles) {
-                                element.style[property] = (diffStyles[property] * progress) + computedStyles[property] + 'px';
+                                var easingProgress = easing[optEasing](progress);
+                                var styleDiff = diffStyles[property] * easingProgress;
+                                element.style[property] = styleDiff + computedStyles[property] + "px";
                             }
                         })];
                     case 3: return [2, _a.sent()];
@@ -162,6 +208,8 @@
                             'height': 200,
                             'margin-top': 100,
                             'margin-left': 100,
+                        }, {
+                            easing: 'easeOutQuad'
                         })];
                     case 1:
                         _a.sent();

@@ -12,6 +12,8 @@ const setAnimate = () => {
       'height': 200,
       'margin-top': 100,
       'margin-left': 100,
+    }, {
+      easing: 'easeOutQuad'
     })
   })
 }

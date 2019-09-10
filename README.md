@@ -14,6 +14,7 @@ const main = async () => {
     'margin-top': 100,
     'margin-left': 100,
   }, {
+    easing: 'easeOutQuad',
     duration: 2000,
     delay: 200
   })
