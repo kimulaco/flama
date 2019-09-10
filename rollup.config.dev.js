@@ -1,5 +1,6 @@
 import { eslint } from 'rollup-plugin-eslint'
 import typescript from 'rollup-plugin-typescript2'
+import {terser} from 'rollup-plugin-terser'
 
 export default [
   {
@@ -10,7 +11,8 @@ export default [
     },
     plugins: [
       eslint(),
-      typescript()
+      typescript(),
+      terser()
     ]
   }
 ]
