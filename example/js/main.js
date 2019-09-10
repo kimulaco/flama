@@ -105,88 +105,50 @@
     };
 
     var DEFAULT_DURATION = 500;
+    var DEFAULT_DELAY = 0;
 
     var getStyle = function (element, styles) {
         var conputedStyles = getComputedStyle(element);
         var resultStyles = {};
         for (var _i = 0, styles_1 = styles; _i < styles_1.length; _i++) {
             var prop = styles_1[_i];
-            resultStyles[prop] = conputedStyles[prop];
+            resultStyles[prop] = parseInt(conputedStyles[prop], 16);
         }
         return resultStyles;
     };
 
     var _this = undefined;
-    var animate = function (element, styles, option) { return __awaiter(_this, void 0, void 0, function () {
-        var computedStyles, diffStyles, currentStyles, property;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    computedStyles = getStyle(element, Object.keys(styles));
-                    diffStyles = {};
-                    currentStyles = {};
-                    console.log(computedStyles);
-                    for (property in computedStyles) {
-                        currentStyles[property] = parseInt(computedStyles[property], 16);
-                        diffStyles[property] = styles[property] - currentStyles[property];
-                    }
-                    if (!option.delay) return [3, 2];
-                    return [4, delay(option.delay)];
-                case 1:
-                    _a.sent();
-                    _a.label = 2;
-                case 2: return [4, frameAnimation(option.duration || DEFAULT_DURATION, function (progress) {
-                        for (property in styles) {
-                            element.style[property] = (diffStyles[property] * progress) + currentStyles[property] + option.ext;
-                        }
-                    })];
-                case 3: return [2, _a.sent()];
-            }
-        });
-    }); };
-
-    var _this$1 = undefined;
-    var setDelay = function () { return __awaiter(_this$1, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4, delay(1000)];
-                case 1:
-                    _a.sent();
-                    console.log('1000 ms');
-                    return [4, delay(2000)];
-                case 2:
-                    _a.sent();
-                    console.log('3000 ms');
-                    return [4, delay(3000)];
-                case 3:
-                    _a.sent();
-                    console.log('6000 ms');
-                    return [2];
-            }
-        });
-    }); };
-    var setFlameAnimation = function () {
-        var btn = document.getElementById('FA-button');
-        var box = document.getElementById('FA-box');
-        if (!btn || !box)
-            return;
-        var startWidth = box.clientWidth;
-        var endWidth = 200;
-        var diffWidth = endWidth - startWidth;
-        btn.addEventListener('click', function () { return __awaiter(_this$1, void 0, void 0, function () {
+    var animate = function (element, styles, option) {
+        if (option === void 0) { option = {}; }
+        return __awaiter(_this, void 0, void 0, function () {
+            var optDuration, optDelay, computedStyles, diffStyles, property;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, frameAnimation(1000, function (progress) {
-                            box.style.width = (diffWidth * progress) + startWidth + 'px';
-                        })];
+                    case 0:
+                        optDuration = option.duration || DEFAULT_DURATION;
+                        optDelay = option.delay || DEFAULT_DELAY;
+                        computedStyles = getStyle(element, Object.keys(styles));
+                        diffStyles = {};
+                        for (property in computedStyles) {
+                            diffStyles[property] = styles[property] - computedStyles[property];
+                        }
+                        if (!optDelay) return [3, 2];
+                        return [4, delay(optDelay)];
                     case 1:
                         _a.sent();
-                        box.style.width = endWidth + 'px';
-                        return [2];
+                        _a.label = 2;
+                    case 2: return [4, frameAnimation(optDuration, function (progress) {
+                            for (property in styles) {
+                                element.style[property] = (diffStyles[property] * progress) + computedStyles[property] + 'px';
+                            }
+                        })];
+                    case 3: return [2, _a.sent()];
                 }
             });
-        }); });
+        });
     };
+
+    var _this$1 = undefined;
     var setAnimate = function () {
         var btn = document.getElementById('F-button');
         var box = document.getElementById('F-box');
@@ -200,10 +162,6 @@
                             'height': 200,
                             'margin-top': 100,
                             'margin-left': 100,
-                        }, {
-                            duration: 1000,
-                            delay: 1000,
-                            ext: 'px'
                         })];
                     case 1:
                         _a.sent();
@@ -212,8 +170,6 @@
             });
         }); });
     };
-    setDelay();
-    setFlameAnimation();
     setAnimate();
 
 }));
