@@ -28,7 +28,8 @@ module.exports = {
           '@typescript-eslint'
         ],
         rules: {
-          '@typescript-eslint/member-delimiter-style': 0
+          '@typescript-eslint/member-delimiter-style': 0,
+          '@typescript-eslint/explicit-function-return-type': 0
         }
     }
   ]
