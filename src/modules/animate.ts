@@ -1,4 +1,4 @@
-import { DEFAULT_DURATION, DEFAULT_DELAY } from '../utils/default'
+import { DEFAULT_DURATION, DEFAULT_DELAY } from '../utils/constants'
 import { getStyle } from '../utils/style'
 import delay from './delay'
 import frameAnimation from './frameAnimation'
