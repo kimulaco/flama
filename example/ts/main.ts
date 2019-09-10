@@ -45,6 +45,7 @@ const setAnimate = () => {
       'margin-left': 100,
     }, {
       duration: 1000,
+      delay: 1000,
       ext: 'px'
     })
   })

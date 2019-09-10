@@ -130,12 +130,17 @@
                         currentStyles[property] = parseInt(computedStyles[property], 16);
                         diffStyles[property] = styles[property] - currentStyles[property];
                     }
-                    return [4, frameAnimation(option.duration || DEFAULT_DURATION, function (progress) {
-                            for (property in styles) {
-                                element.style[property] = (diffStyles[property] * progress) + currentStyles[property] + option.ext;
-                            }
-                        })];
-                case 1: return [2, _a.sent()];
+                    if (!option.delay) return [3, 2];
+                    return [4, delay(option.delay)];
+                case 1:
+                    _a.sent();
+                    _a.label = 2;
+                case 2: return [4, frameAnimation(option.duration || DEFAULT_DURATION, function (progress) {
+                        for (property in styles) {
+                            element.style[property] = (diffStyles[property] * progress) + currentStyles[property] + option.ext;
+                        }
+                    })];
+                case 3: return [2, _a.sent()];
             }
         });
     }); };
@@ -197,6 +202,7 @@
                             'margin-left': 100,
                         }, {
                             duration: 1000,
+                            delay: 1000,
                             ext: 'px'
                         })];
                     case 1:
