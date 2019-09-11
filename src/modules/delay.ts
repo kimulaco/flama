@@ -1,8 +1,7 @@
 const delay = (time: number): Promise<void> => {
   return new Promise((resolve, reject) => {
     try {
-      const timer = setTimeout(() => {
-        clearTimeout(timer)
+      setTimeout(() => {
         resolve()
       }, time)
     } catch (error) {
