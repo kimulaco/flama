@@ -23,13 +23,13 @@ const animate = async (
   const optDuration: number = option.duration || DEFAULT_DURATION
   const optDelay: number = option.delay || DEFAULT_DELAY
   const optEasing: string = option.easing || DEFAULT_EASING
-  const computedStyles: AnimateStyles = getStyle(element, Object.keys(styles))
-  const diffStyles: AnimateStyles = {}
+  const computedStyles: Styles = getStyle(element, Object.keys(styles))
+  const diffStyles: Styles = {}
   let prop: string
 
   for (prop in computedStyles) {
-    const style: AnimateStyles = splitValueUnit(styles[prop])
-    const computedStyle: AnimateStyles = splitValueUnit(computedStyles[prop])
+    const style: Styles = splitValueUnit(styles[prop])
+    const computedStyle: Styles = splitValueUnit(computedStyles[prop])
     diffStyles[prop] = {
       value: style.value - computedStyle.value,
       unit: style.unit
