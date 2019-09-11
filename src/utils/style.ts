@@ -3,7 +3,7 @@ export const getStyle = (element: HTMLElement, styles: any) => {
   const resultStyles: any = {}
 
   for (const prop of styles) {
-    resultStyles[prop] = parseInt(conputedStyles[prop], 16)
+    resultStyles[prop] = parseInt(conputedStyles[prop], 10)
   }
 
   return resultStyles
