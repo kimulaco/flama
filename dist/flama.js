@@ -18,40 +18,50 @@
       });
   };
 
-  var timer = {
-      start: 0,
-      duration: 500
-  };
-  var loopFrame = function (frameFunc, successCallback, failCallback) {
-      try {
-          var elapsed = Date.now() - timer.start;
-          var progress = elapsed / timer.duration;
-          frameFunc(progress);
-          if (elapsed < timer.duration) {
-              requestAnimationFrame(function () {
-                  loopFrame(frameFunc, successCallback, failCallback);
+  var FlameAnimation = (function () {
+      function FlameAnimation() {
+          this.requestId = null;
+          this.startTime = 0;
+          this.duration = 500;
+      }
+      FlameAnimation.prototype.loopFrame = function (frameFunc, successCallback, failCallback) {
+          var _this = this;
+          try {
+              var elapsed = Date.now() - this.startTime;
+              var progress = elapsed / this.duration;
+              frameFunc(progress);
+              if (elapsed < this.duration) {
+                  this.requestId = requestAnimationFrame(function () {
+                      _this.loopFrame(frameFunc, successCallback, failCallback);
+                  });
+              }
+              else {
+                  successCallback();
+              }
+          }
+          catch (error) {
+              failCallback();
+          }
+      };
+      FlameAnimation.prototype.start = function (duration, frameFunc) {
+          var _this = this;
+          return new Promise(function (resolve, reject) {
+              _this.startTime = Date.now();
+              _this.duration = duration;
+              _this.loopFrame(frameFunc, function () {
+                  frameFunc(1);
+                  resolve();
+              }, function () {
+                  reject();
               });
-          }
-          else {
-              successCallback();
-          }
-      }
-      catch (error) {
-          failCallback();
-      }
-  };
-  var frameAnimation = function (duration, frameFunc) {
-      return new Promise(function (resolve, reject) {
-          timer.start = Date.now();
-          timer.duration = duration;
-          loopFrame(frameFunc, function () {
-              frameFunc(1);
-              resolve();
-          }, function () {
-              reject();
           });
-      });
-  };
+      };
+      FlameAnimation.prototype.stop = function () {
+          cancelAnimationFrame(this.requestId);
+      };
+      return FlameAnimation;
+  }());
+  var frameAnimation = new FlameAnimation();
 
   /*! *****************************************************************************
   Copyright (c) Microsoft Corporation. All rights reserved.
@@ -182,7 +192,7 @@
                   case 1:
                       _a.sent();
                       _a.label = 2;
-                  case 2: return [4, frameAnimation(optDuration, function (progress) {
+                  case 2: return [4, frameAnimation.start(optDuration, function (progress) {
                           for (property in styles) {
                               var easingProgress = easing[optEasing](progress);
                               var styleDiff = diffStyles[property] * easingProgress;

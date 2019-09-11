@@ -32,7 +32,7 @@ const animate = async (
 
   if (optDelay) await delay(optDelay)
 
-  return await frameAnimation(optDuration, (progress: number) => {
+  return await frameAnimation.start(optDuration, (progress: number) => {
     for (property in styles) {
       const easingProgress: number = easing[optEasing](progress)
       const styleDiff: number = diffStyles[property] * easingProgress

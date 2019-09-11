@@ -1,53 +1,48 @@
 type FAFunc = (progress: number) => void
 
-interface FATimer {
-  start: number
-  duration: number
-}
+class FlameAnimation {
+  private requestId: any = null
+  private startTime = 0
+  private duration = 500
 
-const timer: FATimer = {
-  start: 0,
-  duration: 500
-}
-
-const loopFrame = (
-  frameFunc: FAFunc,
-  successCallback: () => void,
-  failCallback: () => void
-): void => {
-  try {
-    const elapsed: number = Date.now() - timer.start
-    const progress: number = elapsed / timer.duration
-
-    frameFunc(progress)
-
-    if (elapsed < timer.duration) {
-      requestAnimationFrame(() => {
-        loopFrame(frameFunc, successCallback, failCallback)
-      })
-    } else {
-      successCallback()
+  private loopFrame(
+    frameFunc: FAFunc,
+    successCallback: () => void,
+    failCallback: () => void
+  ): void {
+    try {
+      const elapsed: number = Date.now() - this.startTime
+      const progress: number = elapsed / this.duration
+      frameFunc(progress)
+      if (elapsed < this.duration) {
+        this.requestId = requestAnimationFrame(() => {
+          this.loopFrame(frameFunc, successCallback, failCallback)
+        })
+      } else {
+        successCallback()
+      }
+    } catch (error) {
+      failCallback()
     }
-  } catch (error) {
-    failCallback()
+  }
+
+  start(duration: number, frameFunc: FAFunc): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.startTime = Date.now()
+      this.duration = duration
+
+      this.loopFrame(frameFunc, () => {
+        frameFunc(1)
+        resolve()
+      }, () => {
+        reject()
+      })
+    })
+  }
+
+  stop() {
+    cancelAnimationFrame(this.requestId)
   }
 }
 
-const frameAnimation = (
-  duration: number,
-  frameFunc: FAFunc
-): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    timer.start = Date.now()
-    timer.duration = duration
-
-    loopFrame(frameFunc, () => {
-      frameFunc(1)
-      resolve()
-    }, () => {
-      reject()
-    })
-  })
-}
-
-export default frameAnimation
+export default new FlameAnimation()
