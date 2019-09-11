@@ -13,7 +13,9 @@ class FlameAnimation {
     try {
       const elapsed: number = Date.now() - this.startTime
       const progress: number = elapsed / this.duration
+
       frameFunc(progress)
+
       if (elapsed < this.duration) {
         this.requestId = requestAnimationFrame(() => {
           this.loopFrame(frameFunc, successCallback, failCallback)
