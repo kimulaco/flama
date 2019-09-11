@@ -7,7 +7,7 @@ const setAnimate = () => {
   if (!btn || !box) return
 
   btn.addEventListener('click', async () => {
-    await animate(box, {
+    await animate.start(box, {
       'width': '50%',
       'height': '200px',
       'margin-top': '100px',
