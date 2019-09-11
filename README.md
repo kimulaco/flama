@@ -1,4 +1,4 @@
-# flamin
+# flama
 
 ## Use
 
