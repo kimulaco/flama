@@ -9,10 +9,10 @@ const main = async () => {
   const box = document.getElementById('box')
 
   await animate(box, {
-    'width': 200,
-    'height': 200,
-    'margin-top': 100,
-    'margin-left': 100,
+    'width': '50%',
+    'height': '200px',
+    'margin-top': '100px',
+    'margin-left': 100
   }, {
     easing: 'easeOutQuad',
     duration: 2000,

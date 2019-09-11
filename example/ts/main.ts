@@ -8,10 +8,10 @@ const setAnimate = () => {
 
   btn.addEventListener('click', async () => {
     await animate(box, {
-      'width': '200px',
+      'width': '50%',
       'height': '200px',
       'margin-top': '100px',
-      'margin-left': '100px',
+      'margin-left': 100
     }, {
       easing: 'easeOutQuad'
     })
