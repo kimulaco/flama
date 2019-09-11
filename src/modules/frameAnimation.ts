@@ -1,4 +1,5 @@
 type FAFunc = (progress: number) => void
+type FACallback = () => void
 
 class FlameAnimation {
   private requestId: any = null
@@ -7,8 +8,8 @@ class FlameAnimation {
 
   private loopFrame(
     frameFunc: FAFunc,
-    successCallback: () => void,
-    failCallback: () => void
+    successCallback: FACallback,
+    failCallback: FACallback
   ): void {
     try {
       const elapsed: number = Date.now() - this.startTime
@@ -32,7 +33,6 @@ class FlameAnimation {
       this.duration = duration
 
       this.loopFrame(frameFunc, () => {
-        frameFunc(1)
         resolve()
       }, () => {
         reject()
