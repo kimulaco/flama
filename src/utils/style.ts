@@ -1,3 +1,5 @@
+import { Styles } from '../types'
+
 export const splitValueUnit = (value: string) => {
   const units = ['px', '%', 'vw', 'vh', 'em', 'rem']
   let unit: string
@@ -18,9 +20,9 @@ export const splitValueUnit = (value: string) => {
   }
 }
 
-export const getStyle = (element: HTMLElement, styles: any) => {
-  const conputedStyles: any = getComputedStyle(element)
-  const resultStyles: any = {}
+export const getStyle = (element: HTMLElement, styles: Styles) => {
+  const conputedStyles: Styles = getComputedStyle(element)
+  const resultStyles: Styles = {}
 
   for (const prop of styles) {
     resultStyles[prop] = conputedStyles[prop]

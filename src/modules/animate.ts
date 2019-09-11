@@ -7,6 +7,7 @@ import easing from '../utils/easing'
 import { getStyle, splitValueUnit } from '../utils/style'
 import delay from './delay'
 import frameAnimation from './frameAnimation'
+import { Styles } from '../types'
 
 interface AnimateOption {
   duration?: number
@@ -15,20 +16,20 @@ interface AnimateOption {
 }
 
 const animate = async (
-  element: any,
-  styles: any,
+  element: HTMLElement,
+  styles: Styles,
   option: AnimateOption = {}
 ): Promise<void> => {
   const optDuration: number = option.duration || DEFAULT_DURATION
   const optDelay: number = option.delay || DEFAULT_DELAY
   const optEasing: string = option.easing || DEFAULT_EASING
-  const computedStyles: any = getStyle(element, Object.keys(styles))
-  const diffStyles: any = {}
+  const computedStyles: AnimateStyles = getStyle(element, Object.keys(styles))
+  const diffStyles: AnimateStyles = {}
   let prop: string
 
   for (prop in computedStyles) {
-    const style: any = splitValueUnit(styles[prop])
-    const computedStyle: any = splitValueUnit(computedStyles[prop])
+    const style: AnimateStyles = splitValueUnit(styles[prop])
+    const computedStyle: AnimateStyles = splitValueUnit(computedStyles[prop])
     diffStyles[prop] = {
       value: style.value - computedStyle.value,
       unit: style.unit
@@ -42,7 +43,7 @@ const animate = async (
       const easingProgress: number = easing[optEasing](progress)
       const styleDiff: number = diffStyles[prop].value * easingProgress
       const styleValue = styleDiff + splitValueUnit(computedStyles[prop]).value
-      element.style[prop] = `${styleValue}${diffStyles[prop].unit}`
+      element.style.setProperty(prop, `${styleValue}${diffStyles[prop].unit}`)
     }
   })
 }

@@ -1,7 +1,7 @@
 type FAFunc = (progress: number) => void
 
 class FlameAnimation {
-  private requestId: any = null
+  private requestId = 0
   private startTime = 0
   private duration = 500
 
