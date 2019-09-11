@@ -2,7 +2,7 @@ import { eslint } from 'rollup-plugin-eslint'
 import typescript from 'rollup-plugin-typescript2'
 import {terser} from 'rollup-plugin-terser'
 
-const packageName = 'flanim'
+const packageName = 'flama'
 const isMinify = process.env.MINIFY === 'true'
 let outputFile = ''
 

@@ -3,7 +3,7 @@
 ## Use
 
 ```js
-const { animate } = require('./flanim')
+const { animate } = require('./flama')
 
 const main = async () => {
   const box = document.getElementById('box')

@@ -1,4 +1,4 @@
-import { animate } from '../../src/flanim'
+import { animate } from '../../src/flama'
 
 const setAnimate = () => {
   const btn: HTMLElement | null = document.getElementById('F-button')

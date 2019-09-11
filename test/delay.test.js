@@ -5,8 +5,8 @@ const isAllowableRange = (elapsed, testTime) => {
   return elapsed >= testTime && elapsed <= testTime + ALLOWABLE_RANGE
 }
 
-describe('flanim.delay', () => {
-  const { delay } = require('../dist/flanim')
+describe('flama.delay', () => {
+  const { delay } = require('../dist/flama')
 
   test('delay(300) is success', async () => {
     const testTime = 300
