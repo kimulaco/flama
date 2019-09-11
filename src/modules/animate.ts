@@ -4,7 +4,7 @@ import {
   DEFAULT_EASING
 } from '../utils/constants'
 import easing from '../utils/easing'
-import { getStyle } from '../utils/style'
+import { getStyle, splitValueUnit } from '../utils/style'
 import delay from './delay'
 import frameAnimation from './frameAnimation'
 
@@ -24,19 +24,25 @@ const animate = async (
   const optEasing: string = option.easing || DEFAULT_EASING
   const computedStyles: any = getStyle(element, Object.keys(styles))
   const diffStyles: any = {}
-  let property: string
+  let prop: string
 
-  for (property in computedStyles) {
-    diffStyles[property] = styles[property] - computedStyles[property]
+  for (prop in computedStyles) {
+    const style: any = splitValueUnit(styles[prop])
+    const computedStyle: any = splitValueUnit(computedStyles[prop])
+    diffStyles[prop] = {
+      value: style.value - computedStyle.value,
+      unit: style.unit
+    }
   }
 
   if (optDelay) await delay(optDelay)
 
   return await frameAnimation.start(optDuration, (progress: number) => {
-    for (property in styles) {
+    for (prop in styles) {
       const easingProgress: number = easing[optEasing](progress)
-      const styleDiff: number = diffStyles[property] * easingProgress
-      element.style[property] = `${styleDiff + computedStyles[property]}px`
+      const styleDiff: number = diffStyles[prop].value * easingProgress
+      const styleValue = styleDiff + splitValueUnit(computedStyles[prop]).value
+      element.style[prop] = `${styleValue}${diffStyles[prop].unit}`
     }
   })
 }
