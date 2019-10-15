@@ -5,7 +5,7 @@
   "keywords": [],
   "author": "kimulaco",
   "license": "MIT",
-  "main": "index.js",
+  "main": "dist/flama.js",
   "types": "dist/src/flama.d.ts",
   "scripts": {
     "build": "cross-env NODE_ENV=production rollup -c",
