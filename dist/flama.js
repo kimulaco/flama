@@ -7,8 +7,7 @@
   var delay = function (time) {
       return new Promise(function (resolve, reject) {
           try {
-              var timer_1 = setTimeout(function () {
-                  clearTimeout(timer_1);
+              setTimeout(function () {
                   resolve();
               }, time);
           }
@@ -20,7 +19,7 @@
 
   var FlameAnimation = (function () {
       function FlameAnimation() {
-          this.requestId = null;
+          this.requestId = 0;
           this.startTime = 0;
           this.duration = 500;
       }
@@ -161,51 +160,90 @@
       }
   };
 
+  var splitValueUnit = function (value) {
+      var units = ['px', '%', 'vw', 'vh', 'em', 'rem'];
+      var unit;
+      for (var _i = 0, units_1 = units; _i < units_1.length; _i++) {
+          unit = units_1[_i];
+          var regexp = new RegExp(unit + "$");
+          if (regexp.test(value)) {
+              return {
+                  value: parseInt(value.replace(regexp, ''), 10),
+                  unit: unit
+              };
+          }
+      }
+      return {
+          value: Number(value),
+          unit: 'px'
+      };
+  };
   var getStyle = function (element, styles) {
       var conputedStyles = getComputedStyle(element);
       var resultStyles = {};
       for (var _i = 0, styles_1 = styles; _i < styles_1.length; _i++) {
           var prop = styles_1[_i];
-          resultStyles[prop] = parseInt(conputedStyles[prop], 10);
+          resultStyles[prop] = conputedStyles[prop];
       }
       return resultStyles;
   };
 
-  var _this = undefined;
-  var animate = function (element, styles, option) {
-      if (option === void 0) { option = {}; }
-      return __awaiter(_this, void 0, void 0, function () {
-          var optDuration, optDelay, optEasing, computedStyles, diffStyles, property;
-          return __generator(this, function (_a) {
-              switch (_a.label) {
-                  case 0:
-                      optDuration = option.duration || DEFAULT_DURATION;
-                      optDelay = option.delay || DEFAULT_DELAY;
-                      optEasing = option.easing || DEFAULT_EASING;
-                      computedStyles = getStyle(element, Object.keys(styles));
-                      diffStyles = {};
-                      for (property in computedStyles) {
-                          diffStyles[property] = styles[property] - computedStyles[property];
-                      }
-                      if (!optDelay) return [3, 2];
-                      return [4, delay(optDelay)];
-                  case 1:
-                      _a.sent();
-                      _a.label = 2;
-                  case 2: return [4, frameAnimation.start(optDuration, function (progress) {
-                          for (property in styles) {
-                              var easingProgress = easing[optEasing](progress);
-                              var styleDiff = diffStyles[property] * easingProgress;
-                              element.style[property] = styleDiff + computedStyles[property] + "px";
-                          }
-                      })];
-                  case 3: return [2, _a.sent()];
-              }
+  var FlamaAnimate = (function () {
+      function FlamaAnimate() {
+          this.option = {
+              duration: DEFAULT_DURATION,
+              delay: DEFAULT_DELAY,
+              easing: DEFAULT_EASING
+          };
+      }
+      FlamaAnimate.prototype.createDiffStyles = function (styles, computedStyles) {
+          var diffStyles = {};
+          var prop;
+          for (prop in computedStyles) {
+              var style = splitValueUnit(styles[prop]);
+              var computedStyle = splitValueUnit(computedStyles[prop]);
+              diffStyles[prop] = {
+                  value: style.value - computedStyle.value,
+                  unit: style.unit
+              };
+          }
+          return diffStyles;
+      };
+      FlamaAnimate.prototype.start = function (element, styles, option) {
+          if (option === void 0) { option = {}; }
+          return __awaiter(this, void 0, void 0, function () {
+              var computedStyles, diffStyles;
+              var _this = this;
+              return __generator(this, function (_a) {
+                  switch (_a.label) {
+                      case 0:
+                          this.option = Object.assign(this.option, option);
+                          computedStyles = getStyle(element, Object.keys(styles));
+                          diffStyles = this.createDiffStyles(styles, computedStyles);
+                          if (!this.option.delay) return [3, 2];
+                          return [4, delay(this.option.delay)];
+                      case 1:
+                          _a.sent();
+                          _a.label = 2;
+                      case 2: return [4, frameAnimation.start(this.option.duration, function (progress) {
+                              var prop;
+                              for (prop in styles) {
+                                  var easingProgress = easing[_this.option.easing](progress);
+                                  var styleDiff = diffStyles[prop].value * easingProgress;
+                                  var styleValue = styleDiff + splitValueUnit(computedStyles[prop]).value;
+                                  element.style.setProperty(prop, "" + styleValue + diffStyles[prop].unit);
+                              }
+                          })];
+                      case 3: return [2, _a.sent()];
+                  }
+              });
           });
-      });
-  };
+      };
+      return FlamaAnimate;
+  }());
+  var flamaAnimate = new FlamaAnimate();
 
-  exports.animate = animate;
+  exports.animate = flamaAnimate;
   exports.delay = delay;
   exports.frameAnimation = frameAnimation;
 
